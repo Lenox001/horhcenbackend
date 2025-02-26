@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import HomepageContent, AboutSection
+from .models import HomepageContent, AboutSection,GalleryItem,ContactSubmission, SocialMediaLinks,Testimonial
+
 
 class HomepageContentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +26,24 @@ class AboutSectionSerializer(serializers.ModelSerializer):
     def get_about_img3(self, obj):
         request = self.context.get('request')
         return request.build_absolute_uri(obj.about_img3.url) if obj.about_img3 else None
+    
+class GalleryItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GalleryItem
+        fields = ["id", "image", "caption", "date_posted"]
+        
+class ContactSubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactSubmission
+        fields = '__all__'
+
+
+class SocialMediaLinksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialMediaLinks
+        fields = '__all__'
+        
+class TestimonialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Testimonial
+        fields = '__all__'

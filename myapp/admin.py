@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import HomepageContent,AboutSection
+from .models import HomepageContent, AboutSection, GalleryItem, ContactSubmission, SocialMediaLinks, Testimonial
 
 @admin.register(HomepageContent)
 class HomepageContentAdmin(admin.ModelAdmin):
-    list_display = ("hero_title", "feature_title")  # Show these fields in the admin list
-    search_fields = ("hero_title", "feature_title")  # Enable searching
-    
+    list_display = ("hero_title", "feature_title")
+    search_fields = ("hero_title", "feature_title")
+
     fieldsets = (
         ("Hero Section", {
             "fields": ("hero_title", "hero_subtitle", "hero_image1", "hero_image2"),
@@ -27,3 +27,32 @@ class HomepageContentAdmin(admin.ModelAdmin):
 class AboutSectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'subtitle')
     search_fields = ('title', 'subtitle')
+
+@admin.register(GalleryItem)
+class GalleryItemAdmin(admin.ModelAdmin):
+    list_display = ("id", "image", "caption", "date_posted")
+    ordering = ("-date_posted",)
+
+@admin.register(ContactSubmission)
+class ContactSubmissionAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "phone", "submitted_at")
+    search_fields = ("name", "email", "phone")
+    ordering = ("-submitted_at",)
+
+@admin.register(SocialMediaLinks)
+class SocialMediaLinksAdmin(admin.ModelAdmin):
+    list_display = ("instagram", "whatsapp", "facebook", "tiktok")
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ("name", "title")  # Display name and title in the list view
+    search_fields = ("name", "title")  # Enable searching by name and title
+
+    fieldsets = (
+        ("Client Info", {
+            "fields": ("name", "title"),
+        }),
+        ("Testimonial", {
+            "fields": ("text",),
+        }),
+    )

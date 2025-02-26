@@ -115,3 +115,46 @@ class AboutSection(models.Model):
 
     def __str__(self):
         return self.title or "About Section"
+    
+
+class GalleryItem(models.Model):
+    image = models.ImageField(upload_to="gallery_images/")
+    caption = models.TextField(blank=True)
+    date_posted = models.DateTimeField()
+
+    class Meta:
+        verbose_name = "Gallery Item"
+        verbose_name_plural = "Gallery Items"
+
+    def __str__(self):
+        return f"Gallery Item {self.id}"
+    
+    
+
+class ContactSubmission(models.Model):
+    name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"
+
+
+class SocialMediaLinks(models.Model):
+    instagram = models.URLField(default="https://instagram.com")
+    whatsapp = models.URLField(default="https://wa.me")
+    facebook = models.URLField(default="https://facebook.com")
+    tiktok = models.URLField(default="https://tiktok.com")
+
+    def __str__(self):
+        return "Social Media Links"
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+
+    def __str__(self):
+        return f"{self.name} - {self.title}"
