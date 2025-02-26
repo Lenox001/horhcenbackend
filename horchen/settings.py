@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-cs1w%sqpt1=1%49_xffb1=)-!tgiswl7specntxb(wicj$ec3i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["horchen.pythonanywhere.com","localhost"]
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
