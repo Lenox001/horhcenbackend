@@ -1,34 +1,27 @@
-# Ignore compiled Python files
+# Virtual environment
+venv/
+.venv/
+env/
 *.pyc
-*.pyo
 __pycache__/
 
-# Ignore virtual environments
-.venv/
-venv/
-env/
 
-# Ignore database files
-*.sqlite3
+# Database
 
-# Ignore logs and local settings
-*.log
+# Environment variables
 .env
 *.env
 
-# Ignore static and media files (if generated)
-
-# Ignore IDE and editor files
+# VS Code and OS files
 .vscode/
-.idea/
-*.swp
 .DS_Store
+Thumbs.db
 
-# Ignore Node.js dependencies (if using React frontend)
-node_modules/
-package-lock.json
-yarn.lock
+# Python Bytecode
+*.pyc
+*.pyo
+*.pyd
 
-# Ignore migrations (optional, but useful for clean tracking)
-**/migrations/*.py
-!**/migrations/__init__.py
+# Logs and temporary files
+logs/
+*.log
