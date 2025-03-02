@@ -1,36 +1,16 @@
 from rest_framework import serializers
-from .models import HomepageContent, AboutSection,GalleryItem,ContactSubmission, SocialMediaLinks,Testimonial
+from .models import HomepageContent, GalleryItem,ContactSubmission, SocialMediaLinks,SafariPackage, ItineraryDay,Destination
 
 
 class HomepageContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomepageContent
         fields = '__all__'
-class AboutSectionSerializer(serializers.ModelSerializer):
-    about_img1 = serializers.SerializerMethodField()
-    about_img2 = serializers.SerializerMethodField()
-    about_img3 = serializers.SerializerMethodField()
 
-    class Meta:
-        model = AboutSection
-        fields = '__all__'
-
-    def get_about_img1(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.about_img1.url) if obj.about_img1 else None
-
-    def get_about_img2(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.about_img2.url) if obj.about_img2 else None
-
-    def get_about_img3(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.about_img3.url) if obj.about_img3 else None
-    
 class GalleryItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryItem
-        fields = ["id", "image", "caption", "date_posted"]
+        fields = ["id", "image", "alt_text", "date_posted"]  # Updated 'caption' → 'alt_text'
         
 class ContactSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,7 +23,37 @@ class SocialMediaLinksSerializer(serializers.ModelSerializer):
         model = SocialMediaLinks
         fields = '__all__'
         
-class TestimonialSerializer(serializers.ModelSerializer):
+
+        
+
+
+
+
+class ItineraryDaySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Testimonial
-        fields = '__all__'
+        model = ItineraryDay
+        fields = ["day_number", "description"]
+
+class SafariPackageSerializer(serializers.ModelSerializer):
+    itinerary = ItineraryDaySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = SafariPackage
+        fields = [
+            "title", "description", "location", "duration", "price", "max_people",
+            "slug", "reviews_count", "rating", "image", "itinerary"  # Added image field
+        ]
+        lookup_field = "slug"
+
+class DestinationSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if obj.image:  # Ensure there's an image before trying to format the URL
+            request = self.context.get("request")  # Get the request object if available
+            return request.build_absolute_uri(obj.image.url) if request else f"{settings.MEDIA_URL}{obj.image}"
+        return None  # Return None if no image is available
+
+    class Meta:
+        model = Destination
+        fields = ["title", "country", "image", "description", "rating", "slug"]

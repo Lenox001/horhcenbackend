@@ -1,36 +1,22 @@
 from django.contrib import admin
-from .models import HomepageContent, AboutSection, GalleryItem, ContactSubmission, SocialMediaLinks, Testimonial
+from .models import HomepageContent,  GalleryItem, ContactSubmission, SocialMediaLinks,SafariPackage,  ItineraryDay,Destination
 
 @admin.register(HomepageContent)
 class HomepageContentAdmin(admin.ModelAdmin):
-    list_display = ("hero_title", "feature_title")
-    search_fields = ("hero_title", "feature_title")
+    list_display = ("hero_title",)  # Removed `feature_title`
+    search_fields = ("hero_title",)
 
     fieldsets = (
         ("Hero Section", {
-            "fields": ("hero_title", "hero_subtitle", "hero_image1", "hero_image2"),
-        }),
-        ("Feature Section", {
-            "fields": (
-                "feature_title", "feature_background",
-                "feature1_title", "feature1_description",
-                "feature2_title", "feature2_description",
-                "feature3_title", "feature3_description"
-            ),
-        }),
-        ("Extra Content", {
-            "fields": ("extra_paragraph1", "extra_paragraph2"),
+            "fields": ("hero_title", "hero_text"),
         }),
     )
 
-@admin.register(AboutSection)
-class AboutSectionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'subtitle')
-    search_fields = ('title', 'subtitle')
+
 
 @admin.register(GalleryItem)
 class GalleryItemAdmin(admin.ModelAdmin):
-    list_display = ("id", "image", "caption", "date_posted")
+    list_display = ("id", "image", "alt_text", "date_posted")  # Updated 'caption' → 'alt_text'
     ordering = ("-date_posted",)
 
 @admin.register(ContactSubmission)
@@ -43,16 +29,24 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
 class SocialMediaLinksAdmin(admin.ModelAdmin):
     list_display = ("instagram", "whatsapp", "facebook", "tiktok")
 
-@admin.register(Testimonial)
-class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ("name", "title")  # Display name and title in the list view
-    search_fields = ("name", "title")  # Enable searching by name and title
 
-    fieldsets = (
-        ("Client Info", {
-            "fields": ("name", "title"),
-        }),
-        ("Testimonial", {
-            "fields": ("text",),
-        }),
-    )
+
+class ItineraryDayInline(admin.TabularInline):
+    model = ItineraryDay
+    extra = 1  # Allows adding multiple itinerary days inside SafariPackage
+
+@admin.register(SafariPackage)
+class SafariPackageAdmin(admin.ModelAdmin):
+    list_display = ["title", "location", "duration", "price", "max_people", "image"]
+    search_fields = ["title", "location"]
+    prepopulated_fields = {"slug": ("title",)}
+    inlines = [ItineraryDayInline]
+
+admin.site.register(ItineraryDay)
+
+
+@admin.register(Destination)
+class DestinationAdmin(admin.ModelAdmin):
+    list_display = ("title", "country", "rating", "slug")
+    prepopulated_fields = {"slug": ("title",)}
+    search_fields = ("title", "country", "description")

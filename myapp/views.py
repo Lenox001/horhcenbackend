@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
-from .models import HomepageContent,AboutSection,GalleryItem,ContactSubmission, SocialMediaLinks,Testimonial
-from .serializers import HomepageContentSerializer, AboutSectionSerializer,GalleryItemSerializer,ContactSubmissionSerializer,SocialMediaLinksSerializer,TestimonialSerializer
+from .models import HomepageContent,GalleryItem,ContactSubmission, SocialMediaLinks,SafariPackage,Destination
+from .serializers import HomepageContentSerializer, GalleryItemSerializer,ContactSubmissionSerializer,SocialMediaLinksSerializer,SafariPackageSerializer,DestinationSerializer
 from rest_framework.generics import ListAPIView
 
 def api_home(request):
@@ -16,17 +16,6 @@ class HomepageContentListCreateView(generics.ListCreateAPIView):
     queryset = HomepageContent.objects.all()
     serializer_class = HomepageContentSerializer
 
-class AboutSectionDetailView(generics.RetrieveAPIView):
-    queryset = AboutSection.objects.all()
-    serializer_class = AboutSectionSerializer
-
-    def get_object(self):
-        return AboutSection.objects.first()
-
-    def get(self, request, *args, **kwargs):
-        obj = self.get_object()
-        serializer = self.get_serializer(obj, context={"request": request})
-        return Response(serializer.data)
     
 class GalleryItemListCreateView(generics.ListCreateAPIView):
     queryset = GalleryItem.objects.all()
@@ -44,6 +33,30 @@ class SocialMediaLinksRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return SocialMediaLinks.objects.first()
     
-class TestimonialListView(ListAPIView):
-    queryset = Testimonial.objects.all()
-    serializer_class = TestimonialSerializer
+
+    
+class SafariPackageListView(generics.ListCreateAPIView):
+    """
+    List all safari packages or create a new one.
+    """
+    queryset = SafariPackage.objects.all()
+    serializer_class = SafariPackageSerializer
+
+class SafariPackageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update, or delete a safari package by slug.
+    """
+    queryset = SafariPackage.objects.all()
+    serializer_class = SafariPackageSerializer
+    lookup_field = "slug"
+
+
+    
+class DestinationListView(generics.ListCreateAPIView):
+    queryset = Destination.objects.all()
+    serializer_class = DestinationSerializer
+
+class DestinationDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Destination.objects.all()
+    serializer_class = DestinationSerializer
+    lookup_field = "slug"

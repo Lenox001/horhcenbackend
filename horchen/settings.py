@@ -15,6 +15,8 @@ ALLOWED_HOSTS = ["horchen.pythonanywhere.com","localhost"]
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "http://localhost:5500",
+    
 ]
 
 # Application definition
